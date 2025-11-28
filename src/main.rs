@@ -1,4 +1,4 @@
-use rmcp::{tool_router, handler::server::tool::ToolRouter};
+use rmcp::{handler::server::{ServerHandler, tool::ToolRouter}, service::ServiceExt, tool_router};
 use serde::Deserialize;
 
 #[derive(Clone)]
@@ -18,12 +18,12 @@ impl CopilotTool {
     }
 }
 
+impl ServerHandler for CopilotTool {}
+
 #[tokio::main]
 async fn main() {
     let server = CopilotTool {
         tool_router: ToolRouter::new(),
     };
- //   rmcp::transport::run_server(server).await.unwrap();
-    rmcp::transport::stdio::run_server(server).await.unwrap();
- //
+    server.serve(rmcp::transport::stdio()).await.unwrap();
 }
