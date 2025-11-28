@@ -14,34 +14,26 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // No need to get GitHub Token from gh CLI here or pass it to child
     // as copilot_mcp_tool will get its own token.
 
-    // 1. Launch copilot_mcp_tool as a child process
-    let mut child = Command::new("cargo");
-    child.arg("run")
-        .arg("--manifest-path")
-        .arg("C:\\Users\\gentd\\OneDrive\\Documents\\GitHub\\copilot\\copilot_mcp_tool\\Cargo.toml") // Full path to the main Cargo.toml
-        .arg("--bin") // Specify that we want to run a specific binary
-        .arg("copilot_mcp_tool") // Specify the binary to run from the workspace
-        .arg("--"); // Separate cargo args from child process args.
-
-    // Removed child.env("GITHUB_TOKEN", github_token);
+    // 1. Launch copilot_mcp_tool (now an echo server) as a child process
+    let mut child = Command::new("target/debug/copilot_mcp_tool.exe");
 
     // 2. Create a client to connect to copilot_mcp_tool
     let copilot_mcp_client = serve_client((), TokioChildProcess::new(child).unwrap())
         .await
         .unwrap();
 
-    // 3. Call the copilot_suggest tool with a sample prompt
-    let prompt = "What is the weather in London?"; // Sample prompt for Copilot
+    // 3. Call the echo_message tool with a sample prompt
+    let message = "Hello from client!";
     let request_params = json!({
-        "prompt": prompt
+        "message": message
     });
 
     let request = CallToolRequestParam {
-        name: "copilot_suggest".into(),
+        name: "echo_message".into(), // Changed to echo_message
         arguments: Some(request_params.as_object().cloned().unwrap()),
     };
 
-    println!("Calling copilot_suggest with prompt: \"{}\"", prompt);
+    println!("Calling echo_message with message: \"{}\"", message);
     let result = copilot_mcp_client.peer().call_tool(request).await?;
 
     // 4. Print the result
