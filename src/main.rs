@@ -22,26 +22,49 @@ use level3_tool_module::{EchoTool, EchoInput};
 
 // Helper function to get token from gh CLI (copied from mcp_client_caller)
 async fn get_github_token_from_gh_cli() -> Result<String, Box<dyn std::error::Error>> {
-    let output = Command::new("gh") // Now tokio::process::Command
+    // Try 'gh auth token' first
+    let output = Command::new("gh")
         .arg("auth")
         .arg("token")
         .stdout(Stdio::piped())
         .stderr(Stdio::inherit())
         .spawn()?
         .wait_with_output()
-        .await?; // Await here is now correct
+        .await?;
+
+    if output.status.success() {
+        let token = String::from_utf8_lossy(&output.stdout).trim().to_string();
+        if !token.is_empty() {
+            return Ok(token);
+        }
+    }
+
+    eprintln!("'gh auth token' failed or returned empty. Trying 'gh auth status -t' as fallback.");
+
+    // Fallback to 'gh auth status -t'
+    let output = Command::new("gh")
+        .arg("auth")
+        .arg("status")
+        .arg("-t") // This flag typically prints the token directly
+        .stdout(Stdio::piped())
+        .stderr(Stdio::inherit())
+        .spawn()?
+        .wait_with_output()
+        .await?;
 
     if !output.status.success() {
-        eprintln!("Error: 'gh auth token' failed with status: {}", output.status);
+        eprintln!("Error: 'gh auth status -t' failed with status: {}", output.status);
         io::stdout().write_all(&output.stderr)?;
-        return Err("Failed to get GitHub token from gh CLI".into());
+        return Err("Failed to get GitHub token from gh CLI using both methods".into());
     }
 
-    let token = String::from_utf8_lossy(&output.stdout).trim().to_string();
-    if token.is_empty() {
-        return Err("No token found in 'gh auth token' output.".into());
+    let token_output = String::from_utf8_lossy(&output.stdout).trim().to_string();
+    if token_output.is_empty() {
+        return Err("No token found in 'gh auth status -t' output.".into());
     }
-    Ok(token)
+
+    // gh auth status -t outputs a single line with the token.
+    Ok(token_output)
 }
 
 
