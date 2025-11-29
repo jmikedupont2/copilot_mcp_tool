@@ -1,0 +1,32 @@
+--- STDOUT ---
+Calling echo_message with message: "Hello from client!"
+--- STDERR ---
+warning: unused import: `Value`
+ --> src\bin\mcp_client_caller.rs:4:24
+  |
+4 | use serde_json::{json, Value};
+  |                        ^^^^^
+  |
+  = note: `#[warn(unused_imports)]` on by default
+
+warning: unused import: `std::env`
+ --> src\bin\mcp_client_caller.rs:7:5
+  |
+7 | use std::env;
+  |     ^^^^^^^^
+
+warning: `copilot_mcp_tool` (bin "mcp_client_caller") generated 2 warnings (run `cargo fix --bin "mcp_client_caller"` to apply 2 suggestions)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.42s
+     Running `target\debug\mcp_client_caller.exe`
+Client: Captured server port: 60917
+Client: Attempting to connect to server at 127.0.0.1:60917
+Server stderr: EchoServerTool listening on 127.0.0.1:60917
+Server stderr: Main: Waiting for incoming connection...
+Client: Connected to server at 127.0.0.1:60917.
+Server stderr: Main: Accepted connection from: 127.0.0.1:60918
+Server stderr: Main: Waiting for incoming connection...
+Server stderr: Handler: Serving client 127.0.0.1:60918: Starting rmcp::service::serve
+Client: rmcp client created. Calling echo_message...
+Server stderr: Handler: Serving client 127.0.0.1:60918: Server loop started.
+Error: McpError(ErrorData { code: ErrorCode(-32601), message: "tools/call", data: None })
+error: process didn't exit successfully: `target\debug\mcp_client_caller.exe` (exit code: 1)
