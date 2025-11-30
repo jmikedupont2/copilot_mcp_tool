@@ -1,0 +1,14 @@
+[package]
+name = "mcpdesk_obs_plugin"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+name = "plugin_obs"
+crate-type = ["cdylib"]
+
+[dependencies]
+serde_json = "1.0"
+hbb_common = { path = "../../rustdesk/libs/hbb_common" } # Path to the hbb_common crate
+serde_derive = "1.0"
+serde = "1.0" # Required by serde_derive

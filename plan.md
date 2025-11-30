@@ -69,4 +69,59 @@ The ultimate goal is to evolve `copilot_mcp_tool` into a powerful, extensible co
 *   **`ai-ml-zk-ops`:** Explore how this submodule can contribute to AI/ML model deployment, zero-knowledge proof operations, and secure, verifiable operational workflows.
 *   **`n00b`:** Use the documentation and examples from `n00b` to guide the creation of more user-friendly tooling and setup procedures for new services.
 
-This plan aims to build a flexible and powerful "meta-introspector" capable of managing complex, AI-driven deployments.
+### 3.4 Plugin-based Architecture & New Features
+
+The project is evolving towards a highly extensible, plugin-based architecture, where core functionalities and new features are implemented as dynamically loaded ABI plugins within the `mcpdesk` application. This "systemd-like" approach will allow for flexible management of plugin lifecycles and seamless integration of advanced capabilities.
+
+#### 3.4.1 Core MCP Service Plugin (`mcpdesk_mcp_plugin`)
+
+*   **Objective:** Transform the initial `rustdesk_mcp_service` into a dynamically loaded plugin responsible for exposing core `mcpdesk` (formerly RustDesk) functionalities via MCP.
+*   **Key Tasks:**
+    *   **ABI Design:** Define a stable C-compatible ABI (Application Binary Interface) for the plugin, including functions for initialization, attachment, detachment, and shutdown.
+    *   **`cdylib` Implementation:** Implement the plugin as a Rust `cdylib` (C-compatible dynamic library), exposing the defined ABI.
+    *   **MCP Integration:** Wrap relevant `mcpdesk` functionalities and expose them as MCP tools through this plugin.
+    *   **Plugin Loading:** Implement dynamic plugin loading and lifecycle management within the `mcpdesk` application (using `libloading` or similar).
+    *   **Testing:** Develop and execute comprehensive tests for the plugin's ABI compliance and MCP functionality.
+
+#### 3.4.2 WireGuard Plugin (`mcpdesk_wg_plugin`)
+
+*   **Objective:** Integrate WireGuard VPN functionality as a dynamically loaded plugin to secure connections.
+*   **Key Tasks:**
+    *   **Research:** Identify suitable Rust crates (e.g., `boringtun`, `wireguard-rs`) for WireGuard integration that support `cdylib` and FFI.
+    *   **ABI Design:** Define C-compatible functions for configuration management, tunnel establishment, and status monitoring.
+    *   **MCP Commands:** Design MCP tools (e.g., `wg_up`, `wg_down`, `wg_status`, `wg_add_peer`, `wg_remove_peer`, `wg_list_tunnels`) exposed by the plugin.
+    *   **Implementation:** Implement `mcpdesk_wg_plugin` as a Rust `cdylib`.
+    *   **Integration:** Implement plugin discovery and loading within `mcpdesk` for this plugin.
+    *   **Testing:** Develop and execute tests for WireGuard functionality.
+
+#### 3.4.3 OBS Streaming Plugin (`mcpdesk_obs_plugin`)
+
+*   **Objective:** Provide OBS streaming capabilities as a dynamically loaded plugin.
+*   **Key Tasks:**
+    *   **Research:** Explore Rust bindings for the OBS SDK or a Rust-native headless streaming solution (e.g., based on `gstreamer-rs` or custom WebRTC).
+    *   **ABI Design:** Define C-compatible functions for streaming control (start/stop), source selection, quality settings.
+    *   **MCP Commands:** Design MCP tools (e.g., `obs_start_stream`, `obs_stop_stream`, `obs_set_source`, `obs_get_status`, `obs_set_settings`) exposed by the plugin.
+    *   **Implementation:** Implement `mcpdesk_obs_plugin` as a Rust `cdylib`.
+    *   **Integration:** Implement plugin discovery and loading within `mcpdesk` for this plugin.
+    *   **Testing:** Develop and execute tests for streaming functionality.
+
+#### 3.4.4 Asciinema Recording Plugin (`mcpdesk_asciinema_plugin`)
+
+*   **Objective:** Implement Asciinema-like text-based terminal recording as a dynamically loaded plugin, avoiding heavy multimedia dependencies.
+*   **Key Tasks:**
+    *   **Research:** Identify Rust libraries for efficient terminal I/O capture and `.cast` file format generation.
+    *   **ABI Design:** Define C-compatible functions for recording control (start/stop, pause, resume), and saving recordings.
+    *   **MCP Commands:** Design MCP tools (e.g., `asciinema_start_record`, `asciinema_stop_record`, `asciinema_pause_record`, `asciinema_save_recording`) exposed by the plugin.
+    *   **Implementation:** Implement `mcpdesk_asciinema_plugin` as a Rust `cdylib`.
+    *   **Integration:** Implement plugin discovery and loading within `mcpdesk` for this plugin.
+    *   **Testing:** Develop and execute tests for Asciinema recording functionality.
+
+#### 3.4.5 Nix Packaging
+
+*   **Objective:** Achieve fully reproducible builds and deployments across various environments using Nix.
+*   **Key Tasks:**
+    *   **Research:** Investigate `naersk` or other Rust-on-Nix tooling.
+    *   **Design Nix Expressions:** Create Nix expressions for the `copilot_mcp_tool`, `mcpdesk` (including its plugins), and all their Rust and C/C++ (including `vcpkg`-managed) dependencies.
+    *   **Implementation:** Implement the Nix packaging solution.
+    *   **Testing:** Develop and execute tests to validate the Nix packages.
+

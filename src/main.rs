@@ -1,1 +1,0 @@
-use std::future::{Future, ready}; // Required for impl Future and std::future::ready

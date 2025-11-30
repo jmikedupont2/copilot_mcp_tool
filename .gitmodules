@@ -13,3 +13,9 @@
 [submodule "services/n00b"]
 	path = services/n00b
 	url = https://github.com/meta-introspector/n00b
+[submodule "rustdesk"]
+	path = rustdesk
+	url = https://github.com/RustDesk/RustDesk
+[submodule "vcpkg"]
+	path = vcpkg
+	url = https://github.com/microsoft/vcpkg.git

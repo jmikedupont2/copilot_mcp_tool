@@ -14,15 +14,40 @@ async-openai = "0.19.0"
 dotenv = "0.15"
 anyhow = "1.0"
 schemars = { version = "1.0", features = ["derive", "chrono04"] }
-tracing = "0.1" # Added tracing
-tracing-subscriber = "0.3" # Added tracing-subscriber
-axum = "0.7" # Added for web client
-reqwest = { version = "0.11", features = ["json"] } # Added for web client HTTP requests
-tera = "1" # Added for templating in web client
-lazy_static = "1.4" # Added lazy_static
+tracing = "0.1"
+tracing-subscriber = "0.3"
+axum = "0.7"
+reqwest = { version = "0.11", features = ["json"] }
+tera = "1"
+lazy_static = "1.4"
 sysinfo = "0.37.2"
 futures = "0.3.31"
+# New dependencies from rustdesk_mcp_service
+log = "0.4"
+env_logger = "0.11" # Added for env_logger::init() in main.rs
+uuid = { version = "1.0", features = ["v4"] }
+mcpdesk = { path = "rustdesk" }
+hbb_common = { path = "rustdesk/libs/hbb_common" }
 
 [[bin]]
 name = "mcp_web_client"
 path = "src/bin/mcp_web_client.rs"
+
+# [[bin]]
+# name = "rustdesk_mcp_service"
+# path = "services/rustdesk_mcp_service/src/main.rs"
+
+[workspace]
+members = [
+    "plugins/mcpdesk_obs_plugin"
+]
+
+[workspace.package]
+edition = "2021"
+version = "0.1.0"
+homepage = "https://example.com"
+license = "MIT"
+repository = "https://github.com/rustdesk/rustdesk"
+
+[workspace.dependencies]
+rmcp-macros = { path = "rmcp-sdk/crates/rmcp-macros" }
