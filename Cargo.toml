@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-rmcp = { git = "https://github.com/modelcontextprotocol/rust-sdk", features = ["server","transport-io","macros", "client", "transport-child-process", "transport-async-rw"] }
+rmcp = { path = "rmcp-sdk/crates/rmcp", features = ["server","transport-io","macros", "client", "transport-child-process", "transport-async-rw"] }
 tokio = { version = "1.35", features = ["full", "net"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
@@ -12,9 +12,16 @@ async-trait = "0.1.77"
 copilot-client = { path = "copilot-client.rs" }
 async-openai = "0.19.0"
 dotenv = "0.15"
-schemars = "0.8" # Added
-
+anyhow = "1.0"
+schemars = { version = "1.0", features = ["derive", "chrono04"] }
+tracing = "0.1" # Added tracing
+tracing-subscriber = "0.3" # Added tracing-subscriber
+axum = "0.7" # Added for web client
+reqwest = { version = "0.11", features = ["json"] } # Added for web client HTTP requests
+tera = "1" # Added for templating in web client
+lazy_static = "1.4" # Added lazy_static
+sysinfo = "0.37.2"
 
 [[bin]]
-name = "mcp_client_caller"
-path = "src/bin/mcp_client_caller.rs"
+name = "mcp_web_client"
+path = "src/bin/mcp_web_client.rs"

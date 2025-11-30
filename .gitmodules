@@ -1,3 +1,6 @@
 [submodule "copilot-client.rs"]
 	path = copilot-client.rs
 	url = https://github.com/meta-introspector/copilot-client.rs
+[submodule "rmcp-sdk"]
+	path = rmcp-sdk
+	url = https://github.com/modelcontextprotocol/rust-sdk

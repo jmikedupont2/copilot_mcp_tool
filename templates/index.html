@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MCP Web Client</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        textarea { width: 80%; height: 200px; margin-bottom: 10px; }
+        .output { background-color: #eee; padding: 10px; border: 1px solid #ccc; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <h1>MCP Web Client</h1>
+    <form action="/process" method="post">
+        <textarea name="content" placeholder="Paste your text here..."></textarea><br>
+        <button type="submit">Process with MCP Server</button>
+    </form>
+
+    <h2>Response from MCP Server:</h2>
+    <div class="output">
+        {% if output %}
+            {{ output }}
+        {% else %}
+            No output yet.
+        {% endif %}
+    </div>
+</body>
+</html>
