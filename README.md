@@ -4,19 +4,13 @@
 
 ## Project Structure
 
-This project consists of:
+This project has been refactored into a client-daemon architecture, managed by a single binary: `copilot_mcp_tool`.
 
-*   **`copilot_mcp_tool` (main binary):** The core MCP server. It exposes a `copilot_suggest` tool. When this tool is invoked, it communicates with the GitHub Copilot API (via the `copilot-client` crate). Copilot is prompted to suggest a tool call in JSON format. This server then parses Copilot's suggestion and executes the corresponding tool in a nested fashion.
-*   **`tool_server_module`:** A module within `copilot_mcp_tool` that provides a `WeatherTool` with a `get_weather` function.
-*   **`level2_tool_module`:** A module within `copilot_mcp_tool` that provides a `TimeTool` with a `get_time_in_location` function. This tool is called by `WeatherTool`.
-*   **`level3_tool_module`:** A module within `copilot_mcp_tool` that provides an `EchoTool` with an `echo` function. This tool is called by `TimeTool`.
-*   **`mcp_client_caller` (binary):** A client binary that launches `copilot_mcp_tool` as a child process and calls its `copilot_suggest` tool with a sample prompt, demonstrating the end-to-end functionality.
-
-## Features
-
-*   **Multi-level Nested Tool Calls:** Demonstrates how one tool can invoke another, creating a chain of execution.
-*   **GitHub Copilot Integration:** Utilizes the `copilot-client` crate to interact with the GitHub Copilot API for tool suggestion.
-*   **Model Context Protocol (MCP) Server:** Implements the MCP for structured communication.
+*   **`copilot_mcp_tool` (main binary):** This is the core application, acting as both a server and a client.
+    *   **Server Mode:** When started with `start`, it runs as a detached background process, listening for MCP connections.
+    *   **Client Mode:** When used with commands like `list` or `call`, it connects to the running server instance to execute commands.
+*   **`mcp_web_client` (binary):** A simple web-based GUI that connects to the `copilot_mcp_tool` server to provide a user interface for calling tools.
+*   **Nested Tool Modules:** The project still contains the `WeatherTool`, `TimeTool`, and `EchoTool` to demonstrate multi-level nested tool calling.
 
 ## Prerequisites
 
@@ -64,49 +58,81 @@ Before you begin, ensure you have the following installed:
     cargo build
     ```
 
-## Usage with Gemini CLI
+## Usage
 
-The `copilot_mcp_tool` acts as an MCP server. To integrate it with Gemini CLI, you would typically run it and then configure Gemini CLI to connect to it.
+The `copilot_mcp_tool` is a command-line tool to manage the MCP server and interact with it.
 
-1.  **Run the `copilot_mcp_tool` server:**
+### Managing the Server
 
+First, build the project:
+```bash
+cargo build
+```
+
+**Check the Server Status:**
+By default, running the tool with no arguments shows the server status.
+```bash
+cargo run --bin copilot_mcp_tool
+# Or, more explicitly:
+cargo run --bin copilot_mcp_tool -- status
+# Output: Server is STOPPED.
+```
+
+**Start the Server:**
+This launches the server as a background process.
+```bash
+cargo run --bin copilot_mcp_tool -- start
+# Output:
+# Server starting in background...
+# Server is RUNNING on port 58361 (PID: 12345).
+```
+
+**Stop the Server:**
+```bash
+cargo run --bin copilot_mcp_tool -- stop
+# Output:
+# INFO copilot_mcp_tool: Stopping server (PID: 12345)...
+# INFO copilot_mcp_tool: Server stopped.
+```
+
+### Interacting with the Server
+
+Once the server is running, you can use the client commands.
+
+**List Available Tools:**
+```bash
+cargo run --bin copilot_mcp_tool -- list
+```
+This will connect to the running server and print a JSON list of the available tools (`echo_message` and `kill_process`).
+
+**Call a Tool:**
+The `call` command uses a `tool_name` followed by key-value pairs for parameters.
+```bash
+# Example with a simple message
+cargo run --bin copilot_mcp_tool -- call echo_message message=hello
+
+# Example with spaces in the value (use quotes)
+cargo run --bin copilot_mcp_tool -- call echo_message message="hello world"
+```
+The tool will connect to the server, execute the command, and print the JSON result.
+
+### Using the Web GUI
+
+The project also includes a simple web client.
+
+1.  **Start the MCP server:**
     ```bash
-    cargo run
+    cargo run --bin copilot_mcp_tool -- start
     ```
-    This will start the MCP server, listening for incoming requests, and internally setting up the nested `WeatherTool`, `TimeTool`, and `EchoTool`.
 
-2.  **Configure Gemini CLI (Conceptual):**
-    *   Once the `copilot_mcp_tool` is running, it exposes a MCP endpoint (likely over standard I/O if run directly).
-    *   Your Gemini CLI setup would need to be configured to interact with this running MCP server. This typically involves specifying the transport mechanism (e.g., stdio, TCP) and the address.
-    *   You would then prompt Gemini, asking it to use the `copilot_suggest` tool with an appropriate prompt.
-
-### Example Interaction Flow
-
-1.  **Start `copilot_mcp_tool`:**
+2.  **Run the web client:**
+    In a separate terminal:
     ```bash
-    cargo run
+    cargo run --bin mcp_web_client
     ```
-    The server will start and wait for input.
+    The web client will start and listen on `http://localhost:3000`.
 
-2.  **Using `mcp_client_caller` to test the server:**
-    In a *separate terminal*, with `GITHUB_TOKEN` correctly set in its environment, run the client caller:
-    ```bash
-    cargo run --bin mcp_client_caller
-    ```
-    The `mcp_client_caller` will:
-    *   Launch another instance of `copilot_mcp_tool` (this time acting as the client to *your running server* from step 1, using child process transport).
-    *   Send a prompt to Copilot via the `copilot_suggest` tool (e.g., "What is the weather in London?").
-    *   Copilot will respond with a JSON tool call (e.g., `{"tool": "get_weather", "arguments": {"location": "London"}}`).
-    *   Your running `copilot_mcp_tool` server will parse this, call its internal `WeatherTool`, which in turn might call `TimeTool`, and so on.
-    *   The final result will be returned to the `mcp_client_caller` and printed.
-
-    **Note:** The example above uses `mcp_client_caller` to directly test the server. For a real Gemini CLI integration, the Gemini CLI would be the one issuing the `copilot_suggest` call.
-
-### Demonstrating Nested Calls
-
-*   **`copilot_suggest` -> `get_weather`:** If the prompt is "What is the weather in London?", Copilot will likely suggest `get_weather("London")`.
-*   **`copilot_suggest` -> `get_weather` -> `get_time_in_location`:** If the prompt is "What is the weather and time in TimeCity?", Copilot might suggest `get_weather("TimeCity")`. The `WeatherTool` for "TimeCity" is configured to then call `get_time_in_location("TimeCity")`.
-*   **`copilot_suggest` -> `get_weather` -> `get_time_in_location` -> `echo`:** The `TimeTool` for "EchoCity" is configured to then call `echo("Time for EchoCity")`.
+3.  **Open your browser** and navigate to `http://localhost:3000` to interact with the server through a web interface.
 
 ## Contributing
 
