@@ -4,3 +4,9 @@
 [submodule "rmcp-sdk"]
 	path = rmcp-sdk
 	url = https://github.com/modelcontextprotocol/rust-sdk
+[submodule "services/meta-introspector"]
+	path = services/meta-introspector
+	url = https://github.com/meta-introspector/services/
+[submodule "services/ai-agent-terraform"]
+	path = services/ai-agent-terraform
+	url = https://github.com/meta-introspector/ai-agent-terraform/
