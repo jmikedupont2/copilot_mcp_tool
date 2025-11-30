@@ -21,6 +21,7 @@ reqwest = { version = "0.11", features = ["json"] } # Added for web client HTTP 
 tera = "1" # Added for templating in web client
 lazy_static = "1.4" # Added lazy_static
 sysinfo = "0.37.2"
+futures = "0.3.31"
 
 [[bin]]
 name = "mcp_web_client"

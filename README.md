@@ -1,5 +1,7 @@
 # copilot_mcp_tool
 
+**[Development Plan and Status](plan.md)**
+
 `copilot_mcp_tool` is a Rust-based Model Context Protocol (MCP) server designed to act as a bridge between a Large Language Model (LLM) like Gemini (via `copilot-client`) and a chain of nested tools. This project demonstrates how to create a multi-level nested tool calling system using the MCP.
 
 ## Project Structure
