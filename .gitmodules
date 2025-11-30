@@ -10,3 +10,6 @@
 [submodule "services/ai-agent-terraform"]
 	path = services/ai-agent-terraform
 	url = https://github.com/meta-introspector/ai-agent-terraform/
+[submodule "services/n00b"]
+	path = services/n00b
+	url = https://github.com/meta-introspector/n00b
