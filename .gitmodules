@@ -28,3 +28,12 @@
 [submodule "services/opentelemetry-rust"]
 	path = services/opentelemetry-rust
 	url = https://github.com/jmikedupont2/opentelemetry-rust
+[submodule "gemini-rs"]
+	path = gemini-rs
+	url = https://github.com/meta-introspector/gemini-rs
+[submodule "services/gemini-llm-proxy-rs"]
+	path = services/gemini-llm-proxy-rs
+	url = https://github.com/jmikedupont2/gemini-llm-proxy-rs
+[submodule "dioxus"]
+	path = dioxus
+	url = https://github.com/DioxusLabs/dioxus/
