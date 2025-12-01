@@ -25,3 +25,6 @@
 [submodule "sccache_meta_introspector"]
 	path = sccache_meta_introspector
 	url = https://github.com/meta-introspector/sccache
+[submodule "services/opentelemetry-rust"]
+	path = services/opentelemetry-rust
+	url = https://github.com/jmikedupont2/opentelemetry-rust
