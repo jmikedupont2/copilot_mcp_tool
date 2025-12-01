@@ -19,3 +19,9 @@
 [submodule "vcpkg"]
 	path = vcpkg
 	url = https://github.com/microsoft/vcpkg.git
+[submodule "sciter-js-sdk"]
+	path = sciter-js-sdk
+	url = https://gitlab.com/sciter-engine/sciter-js-sdk
+[submodule "sccache_meta_introspector"]
+	path = sccache_meta_introspector
+	url = https://github.com/meta-introspector/sccache
