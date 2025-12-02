@@ -44,3 +44,6 @@
 [submodule "tray-icon"]
 	path = tray-icon
 	url = https://github.com/meta-introspector/tray-icon
+[submodule "solfunmeme-dioxus"]
+	path = solfunmeme-dioxus
+	url = https://github.com/meta-introspector/solfunmeme-dioxus
