@@ -2,6 +2,7 @@ use tao::{
     event::{Event, StartCause, WindowEvent},
     event_loop::{ControlFlow, EventLoop},
     window::WindowBuilder,
+    raw_window_handle::HasRawWindowHandle, // Added trait import
 };
 use wry::{WebContext, WebViewBuilder}; // Corrected import path and added WebContext
 
