@@ -38,3 +38,9 @@
 [submodule "dioxus"]
 	path = dioxus
 	url = https://github.com/DioxusLabs/dioxus/
+[submodule "muda"]
+	path = muda
+	url = https://github.com/meta-introspector/muda
+[submodule "tray-icon"]
+	path = tray-icon
+	url = https://github.com/meta-introspector/tray-icon

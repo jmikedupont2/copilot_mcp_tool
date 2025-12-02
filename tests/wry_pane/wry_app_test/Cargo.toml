@@ -1,0 +1,11 @@
+[package]
+name = "wry_app_test"
+edition.workspace = true
+version.workspace = true
+homepage.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+wry = { version = "0.53.5", features = ["os-webview", "protocol", "drag-drop"] }
+tao = { version = "0.34.0", features = ["rwh_05"] }
