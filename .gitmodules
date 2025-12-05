@@ -47,3 +47,13 @@
 [submodule "solfunmeme-dioxus"]
 	path = solfunmeme-dioxus
 	url = https://github.com/meta-introspector/solfunmeme-dioxus
+
+[submodule "coro-code"]
+	path = coro-code
+	url = https://github.com/Blushyes/coro-code
+[submodule "claude-code-mux"]
+	path = claude-code-mux
+	url = https://github.com/meta-introspector/claude-code-mux
+[submodule "splitrail"]
+	path = splitrail
+	url = https://github.com/meta-introspector/splitrail.git

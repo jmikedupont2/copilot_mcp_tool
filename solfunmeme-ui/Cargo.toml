@@ -1,0 +1,12 @@
+[package]
+name = "solfunmeme-ui"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+solfunmeme-core = { path = "../solfunmeme-core" } # Re-added dependency
+solfunmeme-loader = { path = "../solfunmeme-loader" }
+dioxus = { path = "../dioxus/packages/dioxus", features = ["html"] }
+dioxus-desktop = { path = "../dioxus/packages/desktop" }
+log = "0.4" # Added
+dioxus-html = { path = "../dioxus/packages/html", features = ["hot-reload-context"] }
