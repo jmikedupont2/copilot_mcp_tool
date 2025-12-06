@@ -1,0 +1,25 @@
+[package]
+name = "mcp_oauth_plugin"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0"
+async-trait = "0.1.80"
+axum = { version = "0.7", features = ["macros"] }
+base64 = "0.22.1"
+chrono = { version = "0.4", features = ["serde"] }
+dirs = "5" # Added
+futures = "0.3.30"
+oauth2 = { version = "5.0", features = ["reqwest"] } # This needs to be consistent with the main crate and enable reqwest feature
+rand = "0.8.5"
+regex = "1.10.4"
+reqwest = { version = "0.12", features = ["json"] } # Ensure json feature is there
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+sha2 = "0.10.8"
+tokio = { version = "1.37", features = ["full"] }
+tracing = "0.1"
+url = { version = "2.5.0", features = ["serde"] }
+
+

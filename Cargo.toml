@@ -44,7 +44,9 @@ members = [
     "dioxus",
     "claude-code-mux",
     "tray-icon" # Added tray-icon to workspace members
-, "tests/wry_pane/wry_app_test", "solfunmeme-core", "solfunmeme-ui"]
+, "tests/wry_pane/wry_app_test", "solfunmeme-core", "solfunmeme-ui",
+    "plugins/mcp_oauth_plugin", # Add the new plugin to the workspace
+]
 exclude = [
 #    "dioxus"
 
