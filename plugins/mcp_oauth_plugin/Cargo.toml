@@ -11,7 +11,8 @@ base64 = "0.22.1"
 chrono = { version = "0.4", features = ["serde"] }
 dirs = "5" # Added
 futures = "0.3.30"
-oauth2 = { version = "5.0", features = ["reqwest"] } # This needs to be consistent with the main crate and enable reqwest feature
+oauth2 = "5.0" # This needs to be consistent with the main crate
+oauth2-reqwest = "0.1" # Added and correctly versioned
 rand = "0.8.5"
 regex = "1.10.4"
 reqwest = { version = "0.12", features = ["json"] } # Ensure json feature is there
